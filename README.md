@@ -1,17 +1,16 @@
-## FITNESSMAIS VAGAS
+## POC
 
-Dashboard para seleção de candidatos, cadastro de vagas e download de currículos.
+Dashboard using php 8.4 with Laravel.
 
 - Content:
     - [Stack](#stack)
     - [Installation](#installation)
     - [Running](#running)
-    - [Tests](#tests)
 
 ## Stack <a name="stack"></a>
 
-- Stack:
-    - [php](https://www.php.net/)
+- Application Stack:
+    - [PHP](https://www.php.net/)
     - [Laravel](https://laravel.com/)
     - [MySQL](https://www.mysql.com/)
     - [PHPUnit](https://phpunit.de/)
@@ -42,36 +41,50 @@ $ cp .env.example .env
 
 Make sure you have [Docker](https://docs.docker.com/engine/install/) and [Docker Compose](https://docs.docker.com/compose/install/) installed.
 
-For create and run containers.
+Build the app image with the following command:
+
+```bash
+# Build app image.
+$ docker compose build app
+```
+
+When the build is finished, you can run the environment in background mode with:
 
 ```bash
 # Up and start all application containers.
 $ docker compose up -d
 ```
 
-Enter into app container:
+We’ll now run composer install to install the application dependencies:
 
 ```bash
-$ docker exec -it app bash
+$ docker compose exec app rm -rf vendor
+$ docker compose exec app composer install
 ```
 
-Install php dependencies with [Composer](https://getcomposer.org/)
+The last thing we need to do is to generate a unique key with the artisan Laravel command-line tool. This key is used to encrypt user sessions and other sensitive data:
 
 ```bash
-$ compose install
+$ docker compose exec app php artisan key:generate
+```
+```bash
+# Output
+Application key set successfully.
 ```
 
 Run all database migrations.
 
 ```bash
-$ php artisan migrate
+$ docker compose exec app php artisan migrate:refresh
 ```
 
-## Test <a name="tests"></a>
-
-For run app:
+Now go to your browser and access your server’s domain name or IP address on port 8000 (default: [localhost:8000/](http://localhost:8000/)):
 
 ```bash
-# Running unit tests.
-$ http://localhost:8080
+$ http://server_domain_or_IP:8000
+```
+
+That's all folks!
+```bash
+=(^.^)=
 ```
